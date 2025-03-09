@@ -1,0 +1,57 @@
+.container {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .form-container, .list-container {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #28a745;
+    color: white;
+  }
+  
+  button:hover {
+    background: #218838;
+  }
+  
+  .edit-btn {
+    background: #ffc107;
+    margin-left: 10px;
+  }
+  
+  .list-container ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  

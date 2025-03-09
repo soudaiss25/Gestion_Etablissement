@@ -1,0 +1,121 @@
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.layout {
+  display: flex;
+  gap: 20px;
+}
+
+.student-list {
+  width: 100%;
+}
+
+.add-student-form {
+  width: 65%;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.student-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.student-item div {
+  flex: 1;
+}
+
+.edit-button, .delete-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.edit-button {
+  background-color: #ffc107;
+  color: black;
+}
+
+.edit-button:hover {
+  background-color: #e0a800;
+}
+
+.delete-button {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #cc0000;
+}
+
+.add-student-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.add-student-form input, 
+.add-student-form select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.cancel-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.cancel-button:hover {
+  background-color: #545b62;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.loading-spinner {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
