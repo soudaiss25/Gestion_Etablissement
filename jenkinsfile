@@ -42,7 +42,7 @@ pipeline {
         stage('Apply Migrations') {
             steps {
                 dir('backend') {
-                    sh 'python3 manage.py migrate'
+                    sh 'python manage.py runserver'
                 }
             }
         }
