@@ -40,12 +40,14 @@ pipeline {
 
         stage('run Django') {
             steps {
-                dir('backend') {
+                
                    sh '''
                    . venv/bin/activate
+                   dir('backend') {
                    python3 backend/manage.py runserver 0.0.0.0:8000
+                    }
                 '''
-                }
+               
             }
         }
 
