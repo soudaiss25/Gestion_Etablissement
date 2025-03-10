@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "gestion-etablissement"
-        GIT_REPO = "https://github.com/soudaiss25/gestion-etablissement.git"
+        GIT_REPO = "https://github.com/soudaiss25/gestion_etablissement.git"
     }
 
     stages {
