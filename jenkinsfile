@@ -74,18 +74,22 @@ pipeline {
             }
         }
 
-        // stage('Collect Static Files') {
-        //     steps {
-        //         dir('backend') {
-        //             sh 'python3 manage.py collectstatic --noinput'
-        //         }
-        //     }
-        // }
+        
 
         stage('Test Backend') {
             steps {
-                dir('backend') {
-                    sh 'python3 manage.py test'  // Exécute les tests Django
+              sh '''
+        # Utilisation de bash pour éviter les erreurs de shell
+        #!/bin/bash
+        
+        # Activation de l'environnement virtuel
+         . venv/bin/activate
+
+        
+
+        # Lancer le serveur Django
+        python3 backend/manage.py test
+        ''' // Exécute les tests Django
                 }
             }
         }
