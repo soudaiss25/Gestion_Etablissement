@@ -28,7 +28,8 @@ pipeline {
 
         stage('Install Dependencies - Django') {
             steps {
-                sh 'source venv/bin/activate'
+                // sh 'python3 -m venv venv'
+                // sh 'source venv/bin/activate'
                 sh 'pip3 install -r requirements.txt'
                 // dir('backend') {
                     
