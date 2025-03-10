@@ -4,6 +4,13 @@ pipeline {
         nodejs "nodeJs"
     }
 
+    
+
+    environment {
+        DOCKER_IMAGE = "gestion-etablissement"
+        GIT_REPO = "https://github.com/soudaiss25/gestion_etablissement.git"
+    }
+
     stages {
         stage('Install dependencies') {
             steps {
@@ -12,14 +19,7 @@ pipeline {
                 sh 'npm install'
             }
         }
-    }
-
-    environment {
-        DOCKER_IMAGE = "gestion-etablissement"
-        GIT_REPO = "https://github.com/soudaiss25/gestion_etablissement.git"
-    }
-
-    stages {
+        
         stage('Checkout') {
             steps {
                 git branch: 'master', url: "${GIT_REPO}"
