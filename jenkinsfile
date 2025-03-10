@@ -2,12 +2,13 @@ pipeline {
     agent any
     tools {
         nodejs "nodeJs"
-        python 'python'
+        
     }
 
     
 
     environment {
+         PYTHON = '/usr/bin/python3'
         DOCKER_IMAGE = "gestion-etablissement"
         GIT_REPO = "https://github.com/soudaiss25/gestion_etablissement.git"
     }
@@ -16,7 +17,7 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 sh 'node -v'
-               
+                sh 'python3 --version'
             }
         }
 
