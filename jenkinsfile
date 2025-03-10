@@ -8,7 +8,7 @@ pipeline {
     
 
     environment {
-         PYTHON = '/usr/bin/python3'
+         PYTHON_PATH = 'C:\\Python312\\python.exe'
         DOCKER_IMAGE = "gestion-etablissement"
         GIT_REPO = "https://github.com/soudaiss25/gestion_etablissement.git"
     }
@@ -17,7 +17,7 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 sh 'node -v'
-                sh 'python3 --version'
+                sh '"%PYTHON_PATH%" --version'
             }
         }
 
