@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_IMAGE = "gestion-etablissement"
+        GIT_REPO = "https://github.com/ton-utilisateur/gestion-etablissement.git"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: "${GIT_REPO}"
+            }
+        }
+
+        stage('Build Backend') {
+            steps {
+                dir('backend') {
+                    bat 'npm install'
+                    bat 'npm run build'  // Adapter selon ton backend
+                }
+            }
+        }
+
+        stage('Test Backend') {
+            steps {
+                dir('backend') {
+                    bat 'npm test'  // Exécute les tests unitaires du backend
+                }
+            }
+        }
+
+        stage('Build Frontend') {
+            steps {
+                dir('frontend') {
+                    bat 'npm install'
+                    bat 'npm run build'
+                }
+            }
+        }
+
+        stage('Test Frontend') {
+            steps {
+                dir('frontend') {
+                    bat 'npm test'  // Exécute les tests du frontend
+                }
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                bat '''
+                docker build -t ${DOCKER_IMAGE}:latest .
+                docker login -u %DOCKER_USER% -p %DOCKER_PASS%
+                docker push ${DOCKER_IMAGE}:latest
+                '''
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                bat '''
+                docker stop gestion-etablissement || echo "Pas de conteneur à stopper"
+                docker run -d --name gestion-etablissement -p 8080:8080 ${DOCKER_IMAGE}:latest
+                '''
+            }
+        }
+    }
+}
