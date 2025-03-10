@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'gestion_etablissement',        # Nom de la base de données
         'USER': 'postgres',                  # Utilisateur PostgreSQL
         'PASSWORD': 'mouximat',                 # Mot de passe de l'utilisateur
-        'HOST': 'localhost',                        # Hôte de la base de données
+        'HOST': '192.168.1.32',                      # Hôte de la base de données
         'PORT': '5432',                             # Port PostgreSQL par défaut
     }
 }
