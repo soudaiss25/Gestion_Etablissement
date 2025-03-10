@@ -46,13 +46,12 @@ pipeline {
         #!/bin/bash
         
         # Activation de l'environnement virtuel
-        source venv/bin/activate
+         . venv/bin/activate
 
-        # Aller dans le dossier "backend"
-        cd backend
+        
 
         # Lancer le serveur Django
-        python3 manage.py runserver 0.0.0.0:8000
+        python3 backend/manage.py runserver 0.0.0.0:8000
         '''
                
             }
