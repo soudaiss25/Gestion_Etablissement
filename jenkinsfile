@@ -15,22 +15,27 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 sh 'node -v'
-                sh 'npm -v'
-                sh 'npm install'
+               
             }
         }
-        
+
         stage('Checkout') {
             steps {
                 git branch: 'master', url: "${GIT_REPO}"
+            }
+        }
+        stage('Install Dependencies - Django') {
+            steps {
+                script {
+                    sh 'pip install -r requirements.txt'
+                }
             }
         }
 
         stage('Build Backend') {
             steps {
                 dir('backend') {
-                    sh 'npm install'
-                    sh 'npm run build'  // Adapter selon ton backend
+                    sh 'python manage.py migrate'  // Adapter selon ton backend
                 }
             }
         }
