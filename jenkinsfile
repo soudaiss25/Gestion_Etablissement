@@ -1,14 +1,12 @@
 pipeline {
     agent any
+
     tools {
         nodejs "nodeJs"
-        
+        python "Python3"
     }
 
-    
-
     environment {
-         PYTHON_PATH = 'C:\\Python312\\python.exe'
         DOCKER_IMAGE = "gestion-etablissement"
         GIT_REPO = "https://github.com/soudaiss25/gestion_etablissement.git"
     }
@@ -17,7 +15,8 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 sh 'node -v'
-                sh '"%PYTHON_PATH%" --version'
+                sh 'python3 --version'
+                sh 'pip3 --version'
             }
         }
 
@@ -26,18 +25,27 @@ pipeline {
                 git branch: 'master', url: "${GIT_REPO}"
             }
         }
+
         stage('Install Dependencies - Django') {
             steps {
-                script {
-                    sh 'pip install -r requirements.txt'
+                dir('backend') {
+                    sh 'pip3 install -r requirements.txt'
                 }
             }
         }
 
-        stage('Build Backend') {
+        stage('Apply Migrations') {
             steps {
                 dir('backend') {
-                    sh 'python manage.py migrate'  // Adapter selon ton backend
+                    sh 'python3 manage.py migrate'
+                }
+            }
+        }
+
+        stage('Collect Static Files') {
+            steps {
+                dir('backend') {
+                    sh 'python3 manage.py collectstatic --noinput'
                 }
             }
         }
@@ -45,7 +53,7 @@ pipeline {
         stage('Test Backend') {
             steps {
                 dir('backend') {
-                    sh 'npm test'  // Exécute les tests unitaires du backend
+                    sh 'python3 manage.py test'  // Exécute les tests Django
                 }
             }
         }
@@ -62,7 +70,7 @@ pipeline {
         stage('Test Frontend') {
             steps {
                 dir('frontend') {
-                    sh 'npm test'  // Exécute les tests du frontend
+                    sh 'npm test'
                 }
             }
         }
@@ -80,8 +88,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                docker stop gestion-etablissement || echo "Pas de conteneur à stopper"
-                docker rm gestion-etablissement || echo "Pas de conteneur à supprimer"
+                docker stop gestion-etablissement || true
+                docker rm gestion-etablissement || true
                 docker run -d --name gestion-etablissement -p 8080:8080 ${DOCKER_IMAGE}:latest
                 '''
             }
