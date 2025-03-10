@@ -26,18 +26,18 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies - Django') {
-            steps {
-                sh'apt install python3.11-venv'
-                 sh 'python3 -m venv venv'
-                 sh 'source venv/bin/activate'
-                 sh 'pip3 install -r requirements.txt'
-                // dir('backend') {
+        // stage('Install Dependencies - Django') {
+        //     steps {
+        //         sh'apt install python3.11-venv'
+        //          sh 'python3 -m venv venv'
+        //          sh 'source venv/bin/activate'
+        //          sh 'pip3 install -r requirements.txt'
+        //         // dir('backend') {
                     
                     
-                // }
-            }
-        }
+        //         // }
+        //     }
+        // }
 
         stage('Apply Migrations') {
             steps {
@@ -47,13 +47,13 @@ pipeline {
             }
         }
 
-        stage('Collect Static Files') {
-            steps {
-                dir('backend') {
-                    sh 'python3 manage.py collectstatic --noinput'
-                }
-            }
-        }
+        // stage('Collect Static Files') {
+        //     steps {
+        //         dir('backend') {
+        //             sh 'python3 manage.py collectstatic --noinput'
+        //         }
+        //     }
+        // }
 
         stage('Test Backend') {
             steps {
