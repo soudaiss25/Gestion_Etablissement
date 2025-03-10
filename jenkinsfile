@@ -25,6 +25,23 @@ pipeline {
                 git branch: 'master', url: "${GIT_REPO}"
             }
         }
+        stage('Build Frontend') {
+            steps {
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+          stage('Test Frontend') {
+            steps {
+                dir('frontend') {
+                    sh 'npm test'
+                }
+            }
+        }
+
+
 
          stage('Install Dependencies - Django') {
              steps {
@@ -73,23 +90,8 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
-            steps {
-                dir('frontend') {
-                    sh 'npm install'
-                    sh 'npm run build'
-                }
-            }
-        }
-
-        stage('Test Frontend') {
-            steps {
-                dir('frontend') {
-                    sh 'npm test'
-                }
-            }
-        }
-
+        
+      
         stage('Docker Build & Push') {
             steps {
                 sh '''
