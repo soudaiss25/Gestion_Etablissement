@@ -28,10 +28,12 @@ pipeline {
 
         stage('Install Dependencies - Django') {
             steps {
-                dir('backend') {
-                    sh 'source venv/bin/activate'
-                    sh 'pip3 install -r requirements.txt'
-                }
+                sh 'source venv/bin/activate'
+                sh 'pip3 install -r requirements.txt'
+                // dir('backend') {
+                    
+                    
+                // }
             }
         }
 
