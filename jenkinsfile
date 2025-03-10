@@ -1,5 +1,18 @@
 pipeline {
     agent any
+    tools {
+        nodejs "nodeJs"
+    }
+
+    stages {
+        stage('Install dependencies') {
+            steps {
+                sh 'node -v'
+                sh 'npm -v'
+                sh 'npm install'
+            }
+        }
+    }
 
     environment {
         DOCKER_IMAGE = "gestion-etablissement"
