@@ -28,22 +28,27 @@ pipeline {
                 git branch: 'master', url: "${GIT_REPO}"
             }
         }
-              stage('SonarQube Analysis') {
-         steps {
-        script {
-                sh 'ls -la $WORKSPACE'
-                        withSonarQubeEnv('sonar') {
-                 sh '''
-                    #!/bin/bash
-                    sonar-scanner \
-                    -Dsonar.projectBaseDir=$WORKSPACE/
-                    -Dsonar.login=squ_5341055fa9b66b94bb732d572552d2f53bbcefb
-                '''
-}
-        }
-    }
-  }
-        
+//               stage('SonarQube Analysis') {
+//          steps {
+//         script {
+//                 sh 'ls -la $WORKSPACE'
+//                         withSonarQubeEnv('sonar') {
+//                  sh '''
+//                     #!/bin/bash
+//                     sonar-scanner \
+//                     -Dsonar.projectBaseDir=$WORKSPACE/
+//                     -Dsonar.login=squ_5341055fa9b66b94bb732d572552d2f53bbcefb
+//                 '''
+// }
+//         }
+//     }
+//   }
+//         stage('Package & Upload Artifacts') {
+//     steps {
+//         sh 'zip -r build.zip build/'
+//         nexusArtifactUploader artifacts: [[artifactId: 'my-app', type: 'zip', classifier: '', file: 'build.zip']], credentialsId: 'nexus-cred', groupId: 'com.mycompany', nexusUrl: 'http://nexus:8081/repository/maven-releases/'
+//     }
+// }
 
         stage('Build Frontend') {
             steps {
@@ -84,26 +89,38 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
-       
+   stage('Docker Build & Push') {
     steps {
         script {
-            
-            sh '''
-                 docker  build -t ${DOCKER_IMAGE}_frontend -f frontend.dockerfile .
-                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                docker push ${DOCKER_IMAGE}_frontend
-            '''
-            
-            
-            sh '''
-                docker build -t ${DOCKER_IMAGE}_backend -f backend.dockerfile .
-                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                docker push ${DOCKER_IMAGE}_backend
-            '''
+            withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                
+                sh '''
+                    # Build et push du frontend
+                    docker build -t ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:${BUILD_NUMBER} -f frontend.dockerfile .
+                    docker tag ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:${BUILD_NUMBER} ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:latest
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:${BUILD_NUMBER}
+                    docker push ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:latest
+                '''
+
+                sh '''
+                    # Build et push du backend
+                    docker build -t ${DOCKER_USER}/${DOCKER_IMAGE}_backend:${BUILD_NUMBER} -f backend.dockerfile .
+                    docker tag ${DOCKER_USER}/${DOCKER_IMAGE}_backend:${BUILD_NUMBER} ${DOCKER_USER}/${DOCKER_IMAGE}_backend:latest
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push ${DOCKER_USER}/${DOCKER_IMAGE}_backend:${BUILD_NUMBER}
+                    docker push ${DOCKER_USER}/${DOCKER_IMAGE}_backend:latest
+                '''
+            }
         }
     }
-            }
+}
+// stage('Deploiement avec Terraform') {
+//     steps {
+//         sh 'terraform init'
+//         sh 'terraform apply -auto-approve'
+//     }
+// }
 
         stage('Deploy') {
             steps {
