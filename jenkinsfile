@@ -29,10 +29,11 @@ pipeline {
             }
         }
               stage('SonarQube Analysis') {
-    steps {
+         steps {
         script {
+                sh 'ls -la $WORKSPACE'
                         withSonarQubeEnv('sonar') {
-  sh '''
+                 sh '''
                     #!/bin/bash
                     sonar-scanner \
                     -Dsonar.projectBaseDir=$WORKSPACE/projet \
