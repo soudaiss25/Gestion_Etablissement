@@ -43,12 +43,12 @@ pipeline {
 //         }
 //     }
 //   }
-//         stage('Package & Upload Artifacts') {
-//     steps {
-//         sh 'zip -r build.zip build/'
-//         nexusArtifactUploader artifacts: [[artifactId: 'my-app', type: 'zip', classifier: '', file: 'build.zip']], credentialsId: 'nexus-cred', groupId: 'com.mycompany', nexusUrl: 'http://nexus:8081/repository/maven-releases/'
-//     }
-// }
+        stage('Package & Upload Artifacts') {
+    steps {
+        sh 'zip -r build.zip build/'
+        nexusArtifactUploader artifacts: [[artifactId: 'my-app', type: 'zip', classifier: '', file: 'build.zip']], credentialsId: 'nexus-cred', groupId: 'com.mycompany', nexusUrl: 'http://nexus:8081/repository/maven-releases/'
+    }
+}
 
         stage('Build Frontend') {
             steps {
@@ -89,32 +89,32 @@ pipeline {
             }
         }
 
-   stage('Docker Build & Push') {
-    steps {
-        script {
-            withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+//    stage('Docker Build & Push') {
+//     steps {
+//         script {
+//             withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                 
-                sh '''
-                    # Build et push du frontend
-                    docker build -t ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:${BUILD_NUMBER} -f frontend.dockerfile .
-                    docker tag ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:${BUILD_NUMBER} ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:latest
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker push ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:${BUILD_NUMBER}
-                    docker push ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:latest
-                '''
+//                 sh '''
+//                     # Build et push du frontend
+//                     docker build -t ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:${BUILD_NUMBER} -f frontend.dockerfile .
+//                     docker tag ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:${BUILD_NUMBER} ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:latest
+//                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+//                     docker push ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:${BUILD_NUMBER}
+//                     docker push ${DOCKER_USER}/${DOCKER_IMAGE}_frontend:latest
+//                 '''
 
-                sh '''
-                    # Build et push du backend
-                    docker build -t ${DOCKER_USER}/${DOCKER_IMAGE}_backend:${BUILD_NUMBER} -f backend.dockerfile .
-                    docker tag ${DOCKER_USER}/${DOCKER_IMAGE}_backend:${BUILD_NUMBER} ${DOCKER_USER}/${DOCKER_IMAGE}_backend:latest
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker push ${DOCKER_USER}/${DOCKER_IMAGE}_backend:${BUILD_NUMBER}
-                    docker push ${DOCKER_USER}/${DOCKER_IMAGE}_backend:latest
-                '''
-            }
-        }
-    }
-}
+//                 sh '''
+//                     # Build et push du backend
+//                     docker build -t ${DOCKER_USER}/${DOCKER_IMAGE}_backend:${BUILD_NUMBER} -f backend.dockerfile .
+//                     docker tag ${DOCKER_USER}/${DOCKER_IMAGE}_backend:${BUILD_NUMBER} ${DOCKER_USER}/${DOCKER_IMAGE}_backend:latest
+//                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+//                     docker push ${DOCKER_USER}/${DOCKER_IMAGE}_backend:${BUILD_NUMBER}
+//                     docker push ${DOCKER_USER}/${DOCKER_IMAGE}_backend:latest
+//                 '''
+//             }
+//         }
+//     }
+// }
 // stage('Deploiement avec Terraform') {
 //     steps {
 //         sh 'terraform init'
@@ -122,14 +122,14 @@ pipeline {
 //     }
 // }
 
-        stage('Deploy') {
-            steps {
-                sh '''
-                    docker stop gestion-etablissement || true
-                    docker rm gestion-etablissement || true
-                    docker run -d --name gestion-etablissement -p 8080:8080 ${DOCKER_IMAGE}:latest
-                '''
-            }
-        }
+        // stage('Deploy') {
+        //     steps {
+        //         sh '''
+        //             docker stop gestion-etablissement || true
+        //             docker rm gestion-etablissement || true
+        //             docker run -d --name gestion-etablissement -p 8080:8080 ${DOCKER_IMAGE}:latest
+        //         '''
+        //     }
+        // }
     }
 }
