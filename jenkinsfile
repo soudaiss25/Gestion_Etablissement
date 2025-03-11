@@ -70,14 +70,14 @@ pipeline {
         script {
             // Build et push de l'image Frontend
             sh '''
-                docker build -t ${DOCKER_IMAGE}_frontend -f frontend.Dockerfile .
+                docker build -t ${DOCKER_IMAGE}_frontend -f frontend.dockerfile .
                 echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                 docker push ${DOCKER_IMAGE}_frontend
             '''
             
             // Build et push de l'image Backend
             sh '''
-                docker build -t ${DOCKER_IMAGE}_backend -f backend.Dockerfile .
+                docker build -t ${DOCKER_IMAGE}_backend -f backend.dockerfile .
                 echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                 docker push ${DOCKER_IMAGE}_backend
             '''
