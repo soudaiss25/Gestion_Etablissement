@@ -21,25 +21,26 @@ pipeline {
                  sh 'pip3 --version'
              }
          }
-         stage('SonarQube Analysis') {
-    steps {
-        script {
-                        withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
-                sh '''
-                    sonar-scanner \
-                    -Dsonar.projectBaseDir=$WORKSPACE \
-                    -Dsonar.login=$SONAR_TOKEN
-                '''
-            }
-        }
-    }
-}
+   
 
         stage('Checkout') {
             steps {
                 git branch: 'master', url: "${GIT_REPO}"
             }
         }
+              stage('SonarQube Analysis') {
+    steps {
+        script {
+                        withSonarQubeEnv('SonarQube') {
+    sh '''
+        sonar-scanner \
+        -Dsonar.projectBaseDir=$WORKSPACE \
+        -Dsonar.login=$SONAR_TOKEN
+    '''
+}
+        }
+    }
+  }
         
 
         stage('Build Frontend') {
