@@ -35,7 +35,7 @@ pipeline {
     sh '''
         sonar-scanner \
         -Dsonar.projectBaseDir=$WORKSPACE \
-        -Dsonar.login=$SONAR_TOKEN
+        -Dsonar.login=squ_5341055fa9b66b94bb732d572552d2f53bbcefb
     '''
 }
         }
