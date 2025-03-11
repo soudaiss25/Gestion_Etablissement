@@ -14,39 +14,20 @@ pipeline {
 
     stages {
          
-        // stage('Install dependencies') {
-        //     steps {
-        //         sh 'node -v'
-        //         sh 'python3 --version'
-        //         sh 'pip3 --version'
-        //     }
-        // }
+        stage('Install dependencies') {
+             steps {
+                 sh 'node -v'
+                 sh 'python3 --version'
+                 sh 'pip3 --version'
+             }
+         }
 
         stage('Checkout') {
             steps {
                 git branch: 'master', url: "${GIT_REPO}"
             }
         }
-        stage('Docker Build & Push') {
-       
-    steps {
-        script {
-            
-            sh '''
-                 docker  build -t ${DOCKER_IMAGE}_frontend -f frontend.dockerfile .
-                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                docker push ${DOCKER_IMAGE}_frontend
-            '''
-            
-            
-            sh '''
-                docker build -t ${DOCKER_IMAGE}_backend -f backend.dockerfile .
-                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                docker push ${DOCKER_IMAGE}_backend
-            '''
-        }
-    }
-            }
+        
 
         stage('Build Frontend') {
             steps {
@@ -87,7 +68,26 @@ pipeline {
             }
         }
 
-      
+        stage('Docker Build & Push') {
+       
+    steps {
+        script {
+            
+            sh '''
+                 docker  build -t ${DOCKER_IMAGE}_frontend -f frontend.dockerfile .
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                docker push ${DOCKER_IMAGE}_frontend
+            '''
+            
+            
+            sh '''
+                docker build -t ${DOCKER_IMAGE}_backend -f backend.dockerfile .
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                docker push ${DOCKER_IMAGE}_backend
+            '''
+        }
+    }
+            }
 
         stage('Deploy') {
             steps {
