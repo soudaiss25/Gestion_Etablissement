@@ -5,10 +5,7 @@ pipeline {
         nodejs "nodeJs"
          dockerTool "docker"
     }
-    docker {
-            image 'docker:dind' // Docker-in-Docker
-            args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
-        }
+  
 
     environment {
         DOCKER_IMAGE = "gestion-etablissement"
@@ -70,6 +67,12 @@ pipeline {
         }
 
        stage('Docker Build & Push') {
+        agent {
+                docker {
+                    image 'docker:dind' // Utilisation de Docker-in-Docker
+                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
     steps {
         script {
             
