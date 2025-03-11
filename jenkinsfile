@@ -32,9 +32,10 @@ pipeline {
     steps {
         script {
                         withSonarQubeEnv('sonar') {
-  sh '''#!/bin/bash
+  sh '''
+                    #!/bin/bash
                     sonar-scanner \
-                    -Dsonar.projectBaseDir=${env.WORKSPACE}/projet \
+                    -Dsonar.projectBaseDir=$WORKSPACE/projet \
                     -Dsonar.login=squ_5341055fa9b66b94bb732d572552d2f53bbcefb
                 '''
 }
