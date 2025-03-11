@@ -5,6 +5,10 @@ pipeline {
         nodejs "nodeJs"
          dockerTool "docker"
     }
+    docker {
+            image 'docker:dind' // Docker-in-Docker
+            args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
+        }
 
     environment {
         DOCKER_IMAGE = "gestion-etablissement"
@@ -77,9 +81,9 @@ pipeline {
             
             
             sh '''
-                ${dockerHome}/docker build -t ${DOCKER_IMAGE}_backend -f backend.dockerfile .
+                docker build -t ${DOCKER_IMAGE}_backend -f backend.dockerfile .
                 echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                ${dockerHome}/docker push ${DOCKER_IMAGE}_backend
+                docker push ${DOCKER_IMAGE}_backend
             '''
         }
     }
