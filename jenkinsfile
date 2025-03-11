@@ -13,6 +13,26 @@ pipeline {
     }
 
     stages {
+         stage('Docker Build & Push') {
+       
+    steps {
+        script {
+            
+            sh '''
+               ${dockerHome}/docker  build -t ${DOCKER_IMAGE}_frontend -f frontend.dockerfile .
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                ${dockerHome}/docker push ${DOCKER_IMAGE}_frontend
+            '''
+            
+            
+            sh '''
+                docker build -t ${DOCKER_IMAGE}_backend -f backend.dockerfile .
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                docker push ${DOCKER_IMAGE}_backend
+            '''
+        }
+    }
+}
         stage('Install dependencies') {
             steps {
                 sh 'node -v'
@@ -66,31 +86,7 @@ pipeline {
             }
         }
 
-       stage('Docker Build & Push') {
-        agent {
-                docker {
-                    image 'docker:dind' // Utilisation de Docker-in-Docker
-                    args '--privileged -v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
-    steps {
-        script {
-            
-            sh '''
-               ${dockerHome}/docker  build -t ${DOCKER_IMAGE}_frontend -f frontend.dockerfile .
-                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                ${dockerHome}/docker push ${DOCKER_IMAGE}_frontend
-            '''
-            
-            
-            sh '''
-                docker build -t ${DOCKER_IMAGE}_backend -f backend.dockerfile .
-                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                docker push ${DOCKER_IMAGE}_backend
-            '''
-        }
-    }
-}
+      
 
         stage('Deploy') {
             steps {
