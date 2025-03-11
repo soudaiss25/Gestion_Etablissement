@@ -33,9 +33,9 @@ pipeline {
         script {
             
             sh '''
-               ${dockerHome}/docker  build -t ${DOCKER_IMAGE}_frontend -f frontend.dockerfile .
+                 docker  build -t ${DOCKER_IMAGE}_frontend -f frontend.dockerfile .
                 echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                ${dockerHome}/docker push ${DOCKER_IMAGE}_frontend
+                docker push ${DOCKER_IMAGE}_frontend
             '''
             
             
