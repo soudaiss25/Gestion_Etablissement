@@ -65,15 +65,25 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
-            steps {
-                sh '''
-                    docker build -t ${DOCKER_IMAGE}:latest .
-                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker push ${DOCKER_IMAGE}:latest
-                '''
-            }
+       stage('Docker Build & Push') {
+    steps {
+        script {
+            // Build et push de l'image Frontend
+            sh '''
+                docker build -t ${DOCKER_IMAGE}_frontend -f frontend.Dockerfile .
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                docker push ${DOCKER_IMAGE}_frontend
+            '''
+            
+            // Build et push de l'image Backend
+            sh '''
+                docker build -t ${DOCKER_IMAGE}_backend -f backend.Dockerfile .
+                echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                docker push ${DOCKER_IMAGE}_backend
+            '''
         }
+    }
+}
 
         stage('Deploy') {
             steps {
