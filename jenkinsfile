@@ -32,11 +32,15 @@ pipeline {
     steps {
         script {
                         withSonarQubeEnv('sonar') {
-    sh '''
-        sonar-scanner \
-        -Dsonar.projectBaseDir=$WORKSPACE \
-        -Dsonar.login=squ_5341055fa9b66b94bb732d572552d2f53bbcefb
-    '''
+   sh '''
+                    # Cloner le projet si ce n'est pas déjà fait dans le stage Checkout
+                    git clone ${GIT_REPO} ${env.WORKSPACE}/projet
+
+                    # Exécuter le sonar-scanner avec le chemin du projet local
+                    sonar-scanner \
+                    -Dsonar.projectBaseDir=${env.WORKSPACE}/projet \
+                    -Dsonar.login=squ_5341055fa9b66b94bb732d572552d2f53bbcefb
+                '''
 }
         }
     }
